@@ -11,11 +11,20 @@ export async function getAllNotes(req, res) {
   }
 }
 
-export function createNote(req, res) {
+export async function createNote(req, res) {
   try {
     const { title, content } = req.body;
-    console.log();
-  } catch (error) {}
+    const newNote = new Note({
+      title,
+      content,
+    });
+    await newNote.save();
+    res.status(201).json({ message: "Note created successfully" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
 }
 
 export function updateNote(req, res) {
